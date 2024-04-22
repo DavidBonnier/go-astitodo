@@ -48,7 +48,7 @@ func (todos *TODOs) extract(path string, excludedPaths ...string) error {
 
 		// Skip excluded paths
 		for _, p := range excludedPaths {
-			if p == path {
+			if filepath.FromSlash(p) == path {
 				if info.IsDir() {
 					return filepath.SkipDir
 				}
@@ -101,7 +101,7 @@ func (todos *TODOs) extractFile(filename string) (err error) {
 				// To do found
 				if length, isTodo := isTodoIdentifier(t); isTodo {
 					// Init to do
-					todo = &TODO{Filename: filename, Line: fset.Position(c.Slash).Line + i}
+					todo = &TODO{Filename: filepath.ToSlash(filename), Line: fset.Position(c.Slash).Line + i}
 					t = strings.TrimSpace(t[length:])
 					if strings.HasPrefix(t, ":") {
 						t = strings.TrimLeft(t, ":")
